@@ -1,0 +1,32 @@
+CREATE TABLE peca_roupa (
+    id_peca SERIAL PRIMARY KEY,
+    modelo VARCHAR(100) NOT NULL,
+    categoria VARCHAR(50) NOT NULL,
+    genero VARCHAR(20) NOT NULL,
+    corte VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE tamanho (
+    id_tamanho SERIAL PRIMARY KEY,
+    id_peca INT NOT NULL,
+    tamanho VARCHAR(10) NOT NULL,
+
+    FOREIGN KEY (id_peca)
+        REFERENCES peca_roupa(id_peca),
+
+    UNIQUE (id_peca, tamanho)
+);
+
+CREATE TABLE medida (
+    id_medida SERIAL PRIMARY KEY,
+    id_tamanho INT NOT NULL,
+
+    ombro DECIMAL(6,2) NOT NULL,
+    cintura DECIMAL(6,2) NOT NULL,
+    altura DECIMAL(6,2) NOT NULL,
+    busto DECIMAL(6,2) NOT NULL,
+
+    FOREIGN KEY (id_tamanho)
+        REFERENCES tamanho(id_tamanho),
+    UNIQUE (id_tamanho)
+);
