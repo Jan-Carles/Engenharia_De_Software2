@@ -1,0 +1,33 @@
+-- Esquema completo para criar as tabelas em um banco novo.
+CREATE TABLE peca_roupa (
+    id_peca SERIAL PRIMARY KEY,
+    modelo VARCHAR(100) NOT NULL,
+    categoria VARCHAR(50) NOT NULL,
+    genero VARCHAR(20) NOT NULL,
+    corte VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE tamanho (
+    id_tamanho SERIAL PRIMARY KEY,
+    id_peca INT NOT NULL,
+    tamanho VARCHAR(10) NOT NULL,
+    CONSTRAINT fk_tamanho_peca
+        FOREIGN KEY (id_peca) REFERENCES peca_roupa(id_peca)
+        ON DELETE CASCADE,
+    CONSTRAINT uq_tamanho_por_peca UNIQUE (id_peca, tamanho)
+);
+
+CREATE TABLE medida (
+    id_medida SERIAL PRIMARY KEY,
+    id_tamanho INT NOT NULL,
+    ombro DECIMAL(6,2) NOT NULL,
+    cintura DECIMAL(6,2) NOT NULL,
+    altura DECIMAL(6,2) NOT NULL,
+    busto DECIMAL(6,2) NOT NULL,
+    CONSTRAINT fk_medida_tamanho
+        FOREIGN KEY (id_tamanho) REFERENCES tamanho(id_tamanho)
+        ON DELETE CASCADE,
+    CONSTRAINT uq_medida_por_tamanho UNIQUE (id_tamanho),
+    CONSTRAINT chk_medidas_nao_negativas
+        CHECK (ombro >= 0 AND cintura >= 0 AND altura >= 0 AND busto >= 0)
+);
